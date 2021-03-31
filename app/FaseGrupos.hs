@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveGeneric     #-}
 
 --Gera os grupos e suas respectivas partidas de uma competição de fase de grupos.
---Aceita de 8, 16 e 32 times. 
+--Aceita 8, 16 ou 32 times. 
 --Qualquer quantidade diferente retorna uma lista vazia de partidas.
 --Aceita opção de jogo único ou casa e fora.
 

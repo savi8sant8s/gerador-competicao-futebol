@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveGeneric     #-}
 
---Gera todas as partidas de um campeonato de pontos corridos.
+--Gera todas as partidas de uma competição de pontos corridos.
 --Aceita de 2 a 20 times. 
 --Qualquer quantidade diferente retorna uma lista vazia de partidas.
 --Aceita opção de jogo único ou casa e fora.

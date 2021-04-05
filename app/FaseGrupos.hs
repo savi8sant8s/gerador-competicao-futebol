@@ -7,7 +7,7 @@
 
 module FaseGrupos where
 
-import Operacoes (dividir, converter, embaralhar,merge)
+import Operacoes (dividir, converter, embaralhar, merge)
 import PontosCorridos (ModeloPontosCorridos, criarPontosCorridos)
 
 import Data.List 

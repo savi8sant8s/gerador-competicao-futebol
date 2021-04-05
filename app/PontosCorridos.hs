@@ -7,7 +7,7 @@
 
 module PontosCorridos where
 
-import Operacoes (embaralhar, converter)
+import Operacoes (embaralhar, converter, roundRobin, inverterRoundRobin)
 
 import Data.List
 import Data.Text (Text, pack)
@@ -22,22 +22,6 @@ data ModeloPontosCorridos = ModeloPontosCorridos {
 
 instance ToJSON ModeloPontosCorridos
 instance FromJSON ModeloPontosCorridos
-
---Explicação do algoritmo: https://pt.wikipedia.org/wiki/Round-robin.
-roundRobin :: Integral a => a -> [[(a, a)]]
-roundRobin n = map (filter notDummy . toPairs) rounds where
-  n' = if odd n then n+1 else n
-  m = n' `div` 2 
-  permute (x:xs@(_:_)) = x : last xs : init xs
-  permute xs = xs 
-  rounds = genericTake (n'-1) $ iterate permute [1..n']
-  notDummy (x,y) = all (<=n) [x,y]
-  toPairs x =  genericTake m $ zip x (reverse x)
-
---Inverte o retorno das combinações geradas pelo Round-robin.
-inverterRoundRobin :: [[(b, a)]] -> [[(a, b)]]
-inverterRoundRobin [] = []
-inverterRoundRobin (a:as) = [ (y,x) | (x,y) <- a] : inverterRoundRobin as
 
 --Gera as rodadas - e suas respectivas partidas - a partir de uma quantidade
 --de times e um booleano informando se possui partidas de ida e volta.

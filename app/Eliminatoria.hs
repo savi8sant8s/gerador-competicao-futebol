@@ -44,8 +44,7 @@ gerarPartidasElim times
             where 
               quantTimes = length times
               quantTimesInvalida = (find (==quantTimes) [4,8,16,32]) == Nothing
-              timesEmbaralhados = converter (embaralhar times)
-              timesDivididos = dividir timesEmbaralhados
+              timesDivididos = dividir times
 
 --Define qual é a descrição da fase eliminatória a partir da quantidade de partidas.
 definirFaseElim :: Int -> [(Fase)]
@@ -71,6 +70,7 @@ criarEliminatoria temIdaVolta times
             fora = (pack "", pack "")
         } | x <- [0..quantPartidas-1]]
     where 
-      partidas = gerarPartidasElim times
+      timesEmbaralhados = converter (embaralhar times)
+      partidas = gerarPartidasElim timesEmbaralhados
       quantPartidas = length partidas
       fase = definirFaseElim quantPartidas

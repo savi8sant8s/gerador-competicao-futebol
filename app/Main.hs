@@ -20,6 +20,7 @@ import System.IO.Unsafe
 
 data Times = Times {
   temIdaVolta:: Bool,
+  sortear:: Bool,
   times :: [Text]
 } deriving (Generic, Show)
 
@@ -45,7 +46,7 @@ app = prehook corsHeader $
   do     
     post "v1/gerar-competicao/mata-mata" $ do
       times' <- jsonBody' :: ApiAction Times
-      let partidas = criarEliminatoria (temIdaVolta times') (times times')
+      let partidas = criarEliminatoria (temIdaVolta times') (sortear times') (times times')
       let timestamp = unsafePerformIO getCurrentTime
       let mataMata = object [ "timestamp" .= timestamp, 
                               "tipo" .= pack "Eliminatória",
@@ -54,7 +55,7 @@ app = prehook corsHeader $
 
     post "v1/gerar-competicao/fase-grupos" $ do
       times' <- jsonBody' :: ApiAction Times
-      let partidas = criarFaseGrupos (temIdaVolta times') (times times')
+      let partidas = criarFaseGrupos (temIdaVolta times') (sortear times') (times times')
       let quantGrupos = (length (times times')) `div` 4
       let segundaFase = if (find (==quantGrupos) [2,4,8]) == Nothing then [] else definirConfrontosClassificados quantGrupos
       let timestamp = unsafePerformIO getCurrentTime
@@ -66,7 +67,7 @@ app = prehook corsHeader $
 
     post "v1/gerar-competicao/pontos-corridos" $ do
       times' <- jsonBody' :: ApiAction Times
-      let partidas = criarPontosCorridos (temIdaVolta times') (times times')
+      let partidas = criarPontosCorridos (temIdaVolta times') (sortear times') (times times')
       let timestamp = unsafePerformIO getCurrentTime
       let pontosCorridos = object [ "timestamp" .= timestamp, 
                                     "tipo" .= pack "Pontos corridos",

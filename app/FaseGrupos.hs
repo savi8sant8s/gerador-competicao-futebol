@@ -1,9 +1,10 @@
 {-# LANGUAGE DeriveGeneric     #-}
 
 --Gera os grupos e suas respectivas partidas de uma competição de fase de grupos.
+--Aceita opção de jogo único ou casa e fora.
+--Aceita opção de sortear times ou não.
 --Aceita 8, 16 ou 32 times. 
 --Qualquer quantidade diferente retorna uma lista vazia de partidas.
---Aceita opção de jogo único ou casa e fora.
 
 module FaseGrupos where
 
@@ -40,22 +41,24 @@ definirConfrontosClassificados quantGrupos = [pack ("1º do grupo " ++ show x ++
 
 --Gera os grupos da competição.
 gerarGrupos :: [Text] -> [[Text]]
-gerarGrupos timesEmbaralhados
+gerarGrupos times
     | quantTimesInvalida = []
-    | otherwise = chunksOf 4 timesEmbaralhados
+    | otherwise = chunksOf 4 times
     where
-        quantTimes = length timesEmbaralhados
+        quantTimes = length times
         quantTimesInvalida = (find (==quantTimes) [8,16,32]) == Nothing
 
---Gera as partidas de cada grupo considerando se possui jogos de ida e volta ou só ida.
+--Gera as partidas de cada grupo considerando se possui jogos de ida e volta.
 gerarPartidas :: Bool -> [Text] -> [[ModeloPontosCorridos]]
-gerarPartidas temIdaVolta timesEmbaralhados = [criarPontosCorridos temIdaVolta x | x <- grupos]
-    where grupos = gerarGrupos timesEmbaralhados
+--Obs.: o parâmetro sortear precisa estar como False
+--pois a lógica de sorteio já é realizada nesse módulo.
+gerarPartidas temIdaVolta times = [criarPontosCorridos temIdaVolta False x | x <- grupos]
+    where grupos = gerarGrupos times
 
 --Cria o modelo de uma competição de fase de grupos a partir de uma
---lista de times e um booleano informando se possui partidas de ida e volta.
-criarFaseGrupos :: Bool -> [Text] -> [ModeloFaseGrupos]
-criarFaseGrupos temIdaVolta times
+--lista de times, opção de ida e volta e opção de sortear times ou não.
+criarFaseGrupos :: Bool -> Bool -> [Text] -> [ModeloFaseGrupos]
+criarFaseGrupos temIdaVolta sortear times
     | quantPartidas == 0 = []
     | otherwise = [ 
         ModeloFaseGrupos { 
@@ -64,8 +67,8 @@ criarFaseGrupos temIdaVolta times
             partidas = (partidas !! x)
         } | x <- [0..quantGrupos-1]]
     where 
-      timesEmbaralhados = converter (embaralhar times)
-      grupos = gerarGrupos timesEmbaralhados
-      partidas = gerarPartidas temIdaVolta timesEmbaralhados
+      times' = if sortear == True then converter (embaralhar times) else times
+      grupos = gerarGrupos times'
+      partidas = gerarPartidas temIdaVolta times'
       quantPartidas = length partidas
       quantGrupos = length grupos

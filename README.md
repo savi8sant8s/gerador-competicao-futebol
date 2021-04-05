@@ -14,11 +14,13 @@ stack run
 Método: POST
 
 Descrição: Gera os confrontos de uma competição no modelo de mata-mata (eliminatória).
+           Aceita opção de jogo único ou casa e fora.
+           Aceita opção de sortear times ou não.
            Aceita 4,8,16 ou 32 times. 
            Qualquer quantidade diferente retorna uma lista vazia de partidas.
-           Aceita opção de jogo único ou casa e fora.
 
-Entrada: { "times": ["Santa Cruz", "Sport", "Náutico", "Salgueiro"], "temIdaVolta": true}
+Entrada: { "times": ["Santa Cruz", "Sport", "Náutico", "Salgueiro"], 
+           "temIdaVolta": true, "sortear": true}
 
 Resposta: {
     "tipo": "Eliminatória",
@@ -40,12 +42,14 @@ Resposta: {
 Método: POST
 
 Descrição: Gera os grupos e suas respectivas partidas de uma competição de fase de grupos.
+           Aceita opção de jogo único ou casa e fora.
+           Aceita opção de sortear times ou não.
            Aceita 8, 16 ou 32 times. 
            Qualquer quantidade diferente retorna uma lista vazia de partidas.
-           Aceita opção de jogo único ou casa e fora.
 
 Entrada: { "times": ["São Paulo", "Corinthians", "Palmeiras", "Internacional", 
-                     "Grêmio", "Atl. Mineiro", "Santos", "Ceará"], "temIdaVolta": false}
+                     "Grêmio", "Atl. Mineiro", "Santos", "Ceará"], 
+                     "temIdaVolta": false, "sortear": true}
 
 Resposta: {
     "tipo": "Fase de Grupos",
@@ -78,11 +82,13 @@ Resposta: {
 Método: POST
 
 Descrição: Gera todas as partidas de uma competição de pontos corridos.
+           Aceita opção de jogo único ou casa e fora.
+           Aceita opção de sortear times ou não.
            Aceita de 2 a 20 times. 
            Qualquer quantidade diferente retorna uma lista vazia de partidas.
-           Aceita opção de jogo único ou casa e fora.
 
-Entrada: { "times": ["Real Madrid", "Barcelona", "Atl. de Madrid", "Sevilla"], "temIdaVolta": false}
+Entrada: { "times": ["Real Madrid", "Barcelona", "Atl. de Madrid", "Sevilla"],
+           "temIdaVolta": false, "sortear": true}
 
 Resposta: {
     "tipo": "Pontos corridos",

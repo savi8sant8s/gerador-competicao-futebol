@@ -1,9 +1,10 @@
 {-# LANGUAGE DeriveGeneric     #-}
 
 --Gera os confrontos de uma competição no modelo de mata-mata (eliminatória).
+--Aceita opção de jogo único ou casa e fora.
+--Aceita opção de sortear times ou não.
 --Aceita 4,8,16 ou 32 times. 
 --Qualquer quantidade diferente retorna uma lista vazia de partidas.
---Aceita opção de jogo único ou casa e fora.
 
 module Eliminatoria where
 
@@ -36,7 +37,7 @@ paraElim 8  = Oitavas
 paraElim 4  = Quartas
 paraElim 2  = Semifinal
 
---Gera as partidas das eliminatórias sorteando os times.
+--Gera as partidas das eliminatórias.
 gerarPartidasElim :: [Text] -> [(Text, Text)]
 gerarPartidasElim times 
             | quantTimesInvalida = []
@@ -51,9 +52,9 @@ definirFaseElim :: Int -> [(Fase)]
 definirFaseElim quantPartidas = [(paraElim quantPartidas) | x <- [1..quantPartidas]]
       
 --Cria o modelo de uma competição eliminatória a partir de uma lista de
---times e um booleano informando se possui partidas de ida e volta.
-criarEliminatoria :: Bool -> [Text] -> [ModeloEliminatoria]
-criarEliminatoria temIdaVolta times
+--times, opção de ida e volta e opção de sortear times ou não.
+criarEliminatoria :: Bool -> Bool -> [Text] -> [ModeloEliminatoria]
+criarEliminatoria temIdaVolta sortear times
     | partidas == [] = []
     | temIdaVolta == True = [ 
         ModeloEliminatoria { 
@@ -70,7 +71,7 @@ criarEliminatoria temIdaVolta times
             fora = (pack "", pack "")
         } | x <- [0..quantPartidas-1]]
     where 
-      timesEmbaralhados = converter (embaralhar times)
-      partidas = gerarPartidasElim timesEmbaralhados
+      times' = if sortear == True then converter (embaralhar times) else times
+      partidas = gerarPartidasElim times'
       quantPartidas = length partidas
       fase = definirFaseElim quantPartidas

@@ -6,9 +6,14 @@ module Main where
 import Eliminatoria (ModeloEliminatoria, criarEliminatoria)
 import FaseGrupos (ModeloFaseGrupos, criarFaseGrupos, definirConfrontosClassificados)
 import PontosCorridos (ModeloPontosCorridos, criarPontosCorridos)
+import BancoDados (registrarRequisicao) 
 
 import Web.Spock
 import Web.Spock.Config
+
+import Control.Monad
+import Control.Monad.Trans
+import Control.Monad.Trans.Maybe
 
 import Data.List
 import Data.Time
@@ -51,6 +56,7 @@ app = prehook corsHeader $
       let mataMata = object [ "timestamp" .= timestamp, 
                               "tipo" .= pack "Eliminatória",
                               "partidas" .= partidas ]
+      sql <- liftIO (registrarRequisicao timestamp "Eliminatória")
       json mataMata
 
     post "v1/gerar-competicao/fase-grupos" $ do
@@ -63,6 +69,7 @@ app = prehook corsHeader $
                                 "tipo" .= pack "Fase de Grupos",
                                 "grupos" .= partidas,
                                 "segundaFase" .= segundaFase ]
+      sql <- liftIO (registrarRequisicao timestamp "Fase de Grupos")
       json faseGrupos
 
     post "v1/gerar-competicao/pontos-corridos" $ do
@@ -72,6 +79,7 @@ app = prehook corsHeader $
       let pontosCorridos = object [ "timestamp" .= timestamp, 
                                     "tipo" .= pack "Pontos corridos",
                                     "partidas" .= partidas ]
+      sql <- liftIO (registrarRequisicao timestamp "Pontos corridos")
       json pontosCorridos
     
       
